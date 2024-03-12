@@ -12,7 +12,7 @@ USER root
 
 COPY . /opt/airflow/dags
 
-RUN chown -R ${AIRFLOW_UID}:${AIRFLOW_GID} /opt/airflow
+#RUN chown -R ${AIRFLOW_UID}:${AIRFLOW_GID} /opt/airflow
 
 WORKDIR /opt/airflow
 
