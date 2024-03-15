@@ -1,6 +1,6 @@
-Airflow + Docker
+https://www.astronomer.io/
 
 
-docker build -t airflow .
+Docker compose: (Airflow)
 
-docker run -it -p 8080:8080 airflow
+docker compose up
