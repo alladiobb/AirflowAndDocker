@@ -11,7 +11,7 @@ import json
 def captura_conta_dados():
     url = "https://data.cityofnewyork.us/resource/rc75-m7u3.json"
     response = requests.get(url)
-    df = pandas.DataFrame(json.load(response.content))
+    df = pandas.DataFrame(json.loads(response.content))
     qtd = len(df.index)
     return qtd
 
@@ -52,4 +52,4 @@ with DAG('first_dag',
     # )
     
     # Defina as dependências entre as tarefas
-    captura_conta_dados >> e_valida >> [valido >> nvalido] >> fim
+    captura_conta_dados >> e_valida >> [valido, nvalido] 
