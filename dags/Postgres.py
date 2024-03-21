@@ -7,7 +7,7 @@ from airflow.hooks.postgres_hook import PostgresHook
 # Define a função para contar as linhas no PostgreSQL
 def count_rows():
     postgres_hook = PostgresHook(postgres_conn_id='postgres_conn_id')  # Defina o ID de conexão do PostgreSQL
-    query = "SELECT COUNT(*) FROM sua_tabela"  # Substitua "sua_tabela" pelo nome da tabela desejada
+    query = "SELECT COUNT(*) FROM venda1"  # Substitua "sua_tabela" pelo nome da tabela desejada
     rows = postgres_hook.get_records(sql=query)
     if rows:
         row_count = rows[0][0]
