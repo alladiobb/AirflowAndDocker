@@ -54,7 +54,7 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
-    AIRFLOW__CORE__TEST_CONNECTION: "True"
+    AIRFLOW__CORE__TEST_CONNECTION: "Enabled"
     # AIRFLOW__CORE__EXPOSE_CONFIG: "True"
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
