@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python import BranchPythonOperator
 from airflow.hooks.postgres_hook import PostgresHook
 
 # Define a função para contar as linhas no PostgreSQL
@@ -11,6 +12,7 @@ def count_rows():
     rows = postgres_hook.get_records(sql=query)
     if rows:
         row_count = rows[0][0]
+        # print(r'Quantidade de Colunas {row_count}')
         return row_count
     else:
         return None
@@ -26,6 +28,15 @@ def decide_path(**kwargs):
             return 'path_less_than_or_equal_to_100'
     else:
         return 'error'
+
+def path_greater_than_100():
+    print("1")
+
+def path_less_than_or_equal_to_100():
+    print("2")
+
+def error_task():
+    print("3")
 
 default_args = {
     'owner': 'airflow',
@@ -54,20 +65,56 @@ count_rows_task = PythonOperator(
 )
 
 # Task para decidir o caminho
-decision_task = PythonOperator(
+branching_task = BranchPythonOperator(
     task_id='decision_task',
     python_callable=decide_path,
     provide_context=True,
     dag=dag,
 )
 
-# Define os caminhos com base na decisão
-path_greater_than_100 = DummyOperator(task_id='path_greater_than_100', dag=dag)
-path_less_than_or_equal_to_100 = DummyOperator(task_id='path_less_than_or_equal_to_100', dag=dag)
-error_task = DummyOperator(task_id='error_task', dag=dag)
+# Branching baseado na decisão
+# branching_task = BranchPythonOperator(
+#     task_id='branching_task',
+#     python_callable=decide_path,
+#     provide_context=True,
+#     dag=dag,
+# )
+
+# Caminhos
+path_greater_than_100 = PythonOperator(
+    task_id='path_greater_than_100',
+    python_callable=path_greater_than_100,
+    provide_context=True,
+    dag=dag,
+)
+
+path_less_than_or_equal_to_100 = PythonOperator(
+    task_id='path_less_than_or_equal_to_100',
+    python_callable=path_less_than_or_equal_to_100,
+    provide_context=True,
+    dag=dag,
+)
+
+error_task = PythonOperator(
+    task_id='error_task',
+    python_callable=error_task,
+    provide_context=True,
+    dag=dag,
+)
+
+# Defina as dependências
+start_task >> count_rows_task >> branching_task
+branching_task
+
+# Defina branching baseado no valor retornado
+branching_task.do_xcom_push = True  # Habilitar envio do valor retornado como XCom
+
+# Defina tarefas subsequentes com base no branching
+branching_task >> path_greater_than_100 >> end_task
+branching_task >> path_less_than_or_equal_to_100 >> end_task
+branching_task >> error_task >> end_task
+
 
 # Define as dependências entre as tarefas
-start_task >> count_rows_task >> decision_task
-decision_task >> path_greater_than_100 >> end_task
-decision_task >> path_less_than_or_equal_to_100 >> end_task
-decision_task >> error_task >> end_task
+# start_task >> count_rows_task >> decision_task
+# decision_task >> [path_greater_than_100 , path_less_than_or_equal_to_100, error_task] >> end_task
