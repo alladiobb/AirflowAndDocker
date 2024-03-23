@@ -22,7 +22,7 @@ def decide_path(**kwargs):
     task_instance = kwargs['task_instance']
     row_count = task_instance.xcom_pull(task_ids='count_rows_task')
     if row_count is not None:
-        if row_count > 100:  # Defina o limite de contagem de linhas para escolher o caminho
+        if row_count > 48484848400:  # Defina o limite de contagem de linhas para escolher o caminho
             return 'path_greater_than_100'
         else:
             return 'path_less_than_or_equal_to_100'
@@ -107,12 +107,10 @@ start_task >> count_rows_task >> branching_task
 branching_task
 
 # Defina branching baseado no valor retornado
-branching_task.do_xcom_push = True  # Habilitar envio do valor retornado como XCom
+# branching_task.do_xcom_push = True  # Habilitar envio do valor retornado como XCom
 
 # Defina tarefas subsequentes com base no branching
-branching_task >> path_greater_than_100 >> end_task
-branching_task >> path_less_than_or_equal_to_100 >> end_task
-branching_task >> error_task >> end_task
+branching_task >> [path_greater_than_100 , path_less_than_or_equal_to_100 , error_task] >> end_task
 
 
 # Define as dependências entre as tarefas
