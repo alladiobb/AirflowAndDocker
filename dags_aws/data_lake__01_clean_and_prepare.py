@@ -48,13 +48,13 @@ with DAG(
 
     delete_catalog = BashOperator(
         task_id="delete_catalog",
-        bash_command='aws glue delete-database --name project || echo "Database project not found."',
+        bash_command='aws glue delete-database --name project01 || echo "Database project01 not found."',
     )
 
     create_catalog = BashOperator(
         task_id="create_catalog",
         bash_command="""aws glue create-database --database-input \
-            '{"Name": "project", "Description": "Datasets from AWS PROJECT relational database"}'""",
+            '{"Name": "project01", "Description": "Datasets from AWS PROJECT01 relational database"}'""",
     )
 
 chain(

@@ -34,14 +34,14 @@ with DAG(
 
     list_glue_tables = BashOperator(
         task_id="list_glue_tables",
-        bash_command="""aws glue get-tables --database-name project \
+        bash_command="""aws glue get-tables --database-name project01 \
                         --query 'TableList[].Name' --expression "raw_*" \
                         --output table""",
     )
 
     for table in TABLES:
         start_jobs_raw = AwsGlueJobOperator(
-            task_id=f"start_job_{table}_raw", job_name=f"project_public_{table}_raw"
+            task_id=f"start_job_{table}_raw", job_name=f"project01_public_{table}_raw"
         )
 
         chain(

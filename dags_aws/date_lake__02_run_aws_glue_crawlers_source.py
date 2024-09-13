@@ -10,7 +10,7 @@ from airflow.utils.dates import days_ago
 
 DAG_ID = os.path.basename(__file__).replace(".py","")
 
-CRAWLERS = ["project_vendas_db", "project_crm_db","project_logistica_db"]
+CRAWLERS = ["project01_vendas_db", "project01_crm_db","project01_logistica_db"]
 
 DEFAUL_ARGS = {
     "owner": "Alladio",
@@ -35,8 +35,8 @@ with DAG (
     end = DummyOperator(task_id="end")
     
     list_glue_tables = BashOperator(
-        task_id = "list_glue_tables"
-        bash_command="""aws glue get-tables --database-name project \
+        task_id = "list_glue_tables",
+        bash_command="""aws glue get-tables --database-name project01 \
                         --query 'TableList[].Name' --expression "source_*" \
                         --output table""",
     )
