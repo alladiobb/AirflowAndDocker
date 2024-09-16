@@ -13,7 +13,7 @@ DAG_ID = os.path.basename(__file__).replace(".py","")
 S3_BUCKET = Variable.get("data_lake_bucket")
 
 DEFAULT_ARGS = {
-    "owner": "alladio",
+    "owner":"Alladio Bonesso",
     "depends_on_past": "False",
     "retires": 0,
     "email_on_failure": False,
@@ -24,6 +24,7 @@ with DAG(
     dag_id=DAG_ID,
     description="Data Lake using BashOperator and AWS CLI vs. AWS Operators",
     default_args=DEFAULT_ARGS,
+    max_active_runs=1,
     default_timeout= timedelta(minutes=5),
     start_date=days_ago(1),
     schedule_interval_=None,

@@ -13,7 +13,7 @@ DAG_ID = os.path.basename(__file__).replace(".py","")
 TABLES = ["users","venue","category", "date", "event", "listing", "sales"]
 
 DEFAULT_ARGS = {
-    "owner":"alladio",
+    "owner":"Alladio Bonesso",
     "depends_on_past":False,
     "retries":0,
     "email_on_failure":False,
@@ -24,6 +24,7 @@ with DAG(
     dag_ig=DAG_ID,
     description="Run AWS Glue ETL Jobs - Source data to raw (bronze) Data",
     default_args=DEFAULT_ARGS,
+    max_active_runs=1,
     dagrun_timeout=days_ago(1),
     schedule_interval=None,
     tags=["data lake", "raw", "bronze"],

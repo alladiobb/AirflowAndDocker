@@ -13,7 +13,7 @@ DAG_ID = os.path.basename(__file__).replace(".py","")
 CRAWLERS = ["project01_vendas_db", "project01_crm_db","project01_logistica_db"]
 
 DEFAUL_ARGS = {
-    "owner": "Alladio",
+    "owner":"Alladio Bonesso",
     "depends_on_past": False,
     "retries": 0,
     "email_on_failure": False,
@@ -24,6 +24,7 @@ with DAG (
     dag_id=DAG_ID,
     description= "Run Aws Glue Crawlers",
     default_args=DEFAUL_ARGS,
+    max_active_runs=1,
     dagrun_timeout=timedelta(minutes=15),
     start_date=days_ago(1),
     schedule_interval=None,
