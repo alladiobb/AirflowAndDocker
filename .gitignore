@@ -3,3 +3,6 @@
 plugins
 logs/
 dags/__pycache__/*
+.venv
+.idea
+env_dags_json_files
