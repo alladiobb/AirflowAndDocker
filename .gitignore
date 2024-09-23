@@ -6,3 +6,4 @@ dags/__pycache__/*
 .venv
 .idea
 env_dags_json_files*
+env_dags_GCP
